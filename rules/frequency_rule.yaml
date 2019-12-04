@@ -1,0 +1,64 @@
+# Alert when the rate of events exceeds a threshold
+# (Optional)
+# Elasticsearch host
+es_host: 44.225.165.227
+
+# (Optional)
+# Elasticsearch port
+es_port: 9200
+
+# (OptionaL) Connect with SSL to Elasticsearch
+#use_ssl: True
+
+# (Optional) basic-auth username and password for Elasticsearch
+es_username: elastic
+es_password: changeme
+
+# (Required)
+# Rule name, must be unique
+name: Frequency rule!
+
+# (Required)
+# Type of alert.
+# the frequency rule type alerts when num_events events occur with timeframe time
+type: frequency
+
+
+# (Required)
+# Index to search, wildcard supported
+index: metricbeat-*
+
+# (Required)
+#load 5 minutes data from present time in index for every 1 minute with minimum events occurred 1
+buffer_time:
+  minutes: 10
+run_every:
+  minutes: 1
+  
+# (Required, frequency specific)
+# Alert when this many documents matching the query occur within a timeframe
+num_events: 1
+
+# (Required, frequency specific)
+# num_events must occur within this amount of time to trigger an alert
+timeframe:
+  hours: 1
+
+# (Required)
+# A list of Elasticsearch filters used for find events
+# These filters are joined with AND and nested in a filtered query
+# For more info: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html
+filter:
+- query:
+    query_string:
+#      query: "username: bob"    
+      query: "agent.hostname: comp1"
+
+# (Required)
+# The alert is use when a match is found
+alert:
+  - slack
+  
+slack_webhook_url: "https://hooks.slack.com/services/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"
+alert_subject: "Message from ElastAlert"
+# slack_username_override: "ElastAlert"
