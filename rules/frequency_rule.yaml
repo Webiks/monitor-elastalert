@@ -59,6 +59,6 @@ filter:
 alert:
   - slack
   
-slack_webhook_url: <http://host:port/yada/yada/yada>
+slack_webhook_url: "<http://host:port/yada/yada/yada>"
 alert_subject: "Message from ElastAlert"
 # slack_username_override: "ElastAlert"
