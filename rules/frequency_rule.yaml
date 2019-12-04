@@ -58,7 +58,7 @@ filter:
 # The alert is use when a match is found
 alert:
   - slack
-  
+
 slack_webhook_url: "<http://host:port/yada/yada/yada>"
 alert_subject: "Message from ElastAlert"
 # slack_username_override: "ElastAlert"
