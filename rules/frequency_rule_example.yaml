@@ -1,0 +1,50 @@
+# Creating a Rule - https://elastalert.readthedocs.io/en/latest/running_elastalert.html#creating-a-rule
+# As is, this rule means “Send a message to Slack via web_hook_url and an email to elastalert@example.com
+# when there are more than 50 documents with some_field == some_value within a 4 hour period.”
+
+# es_host and es_port should point to the Elasticsearch server/cluster we want to query.
+es_host: elasic.monitor.net
+es_port: 9200
+
+# name is the unique name for this rule.
+# ElastAlert will not start if two rules share the same name.
+name: Frequency rule
+
+# Each rule has a different type which may take different parameters.
+# The frequency type means “Alert when more than num_events occur within timeframe.”
+# For information other types, see https://elastalert.readthedocs.io/en/latest/ruletypes.html#ruletypes
+type: frequency
+
+# The name of the index(es) to query.
+# If you are using Logstash, by default the indexes will match "logstash-*".
+index: logstash-*
+
+#This parameter is specific to frequency type and is the threshold for when an alert is triggered.
+num_events: 50
+
+# timeframe is the time period in which num_events must occur.
+timeframe:
+    hours: 4
+
+# filter is a list of Elasticsearch filters that are used to filter results.
+# Here we have a single term filter for documents with some_field matching some_value.
+# See Writing Filters For Rules for more https://elastalert.readthedocs.io/en/latest/recipes/writing_filters.html#writingfilters
+filter:
+  - term:
+    some_field: "some_value"
+
+# alert is a list of alerts to run on each match.
+# For more information on alert types
+# see Alerts.
+# The email alert requires an SMTP server for sending mail. By default, it will attempt to use localhost.
+# This can be changed with the smtp_host option.
+# For slack alerter see Slack https://elastalert.readthedocs.io/en/latest/ruletypes.html#slack
+alert:
+  - slack:
+      slack_webhook_url: "https://hooks.slack.com/services/XXXXXXXXX"
+  - email:
+      from_addr: "no-reply@example.com"
+      email: "elastalert@example.com"
+
+# any alerter that has a “subject” can be customized by adding an alert_subject that contains a custom summary
+alert_subject: "Issue {0} occurred at {1}"
